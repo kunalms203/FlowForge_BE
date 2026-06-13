@@ -67,7 +67,7 @@ model User {
 
   memberships   WorkspaceMember[]
 
-  projectMembers ProjectMember[]  // <-- add this
+  projectMembers ProjectMember[] 
 
   comments Comment[]
 

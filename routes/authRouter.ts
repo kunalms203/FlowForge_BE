@@ -1,11 +1,6 @@
-import express, { Router, type Request,type Response } from "express";
+import express from "express";
 const router = express.Router();
 
-router.get("/login",(req:Request,res:Response)=>{
-    res.status(200).json({
-        success:true,
-        message:"logged in successfully"
-    })
-});
+router.get("/login");
 
 export default router;
