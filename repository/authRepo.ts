@@ -9,7 +9,7 @@ export const findUserByMail = async (email: string): Promise<User> => {
   });
 
   if (!user) {
-    throw new Error("NOT_FOUND");
+    throw new Error("USER NOT FOUND");
   }
 
   return user;

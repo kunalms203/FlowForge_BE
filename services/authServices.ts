@@ -1,25 +1,30 @@
-import bcrypt from "bcrypt"
-import { findUserByMail } from "../repository/authRepo"
+import bcrypt from "bcrypt";
+import { findUserByMail } from "../repository/authRepo";
 import { sign } from "jsonwebtoken";
+import type { loginReponse } from "../types/authTypes";
 
 const secret = process.env.JWTSECRET;
 
+export const loginWithMail = async (
+  email: string,
+  password: string,
+): Promise<loginReponse> => {
+  const user = await findUserByMail(email);
 
+  const isAuthenticated = await bcrypt.compare(password, user.passwordHash);
 
-const login = async(email:string,name:string,password:string)=>{
-    const user = await findUserByMail(email);
+  if (!isAuthenticated) {
+    throw new Error("INCORRECT PASSWORD");
+  }
 
-    const isAuthenticated = await bcrypt.compare(password,user.passwordHash);
+  if (!secret) {
+    throw new Error("Please add JWT secret in ENV");
+  }
 
+  const token = sign(
+    { id: user.id, name: user.fullName, mail: user.email },
+    secret,
+  );
 
-    if(!isAuthenticated){
-        throw new Error ("NOT_FOUND")
-    }
-
-    if(!secret){
-        throw new Error ("Please add JWT secret in ENV")
-    }
-
-    const token = sign({id:user.id,name:user.fullName,mail:user.email},secret)
-
-}
+  return { token, id: Number(user.id), name: user.fullName, mail: user.email };
+};
