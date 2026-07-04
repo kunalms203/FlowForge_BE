@@ -1,14 +1,16 @@
-import { sign } from 'jsonwebtoken';
+import { sign,SignOptions } from 'jsonwebtoken';
 import { env } from '../../config/env';
+
+type ExpiresIn = SignOptions["expiresIn"];
 
 export const generateAccessToken = (user: { id: string; email: string; fullName: string }) => {
   return sign(
     { id: user.id, email: user.email, fullName: user.fullName },
     env.JWT_SECRET,
-    { expiresIn: env.ACCESS_TOKEN_EXPIRY }
+    { expiresIn: env.ACCESS_TOKEN_EXPIRY as ExpiresIn}
   );
 };
 
 export const generateRefreshToken = (userId: string) => {
-  return sign({ id: userId }, env.REFRESH_SECRET, { expiresIn: env.REFRESH_TOKEN_EXPIRY });
+  return sign({ id: userId }, env.REFRESH_SECRET, { expiresIn: env.REFRESH_TOKEN_EXPIRY as ExpiresIn });
 };
