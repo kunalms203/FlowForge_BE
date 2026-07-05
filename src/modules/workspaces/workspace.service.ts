@@ -1,6 +1,6 @@
 import { AppError } from '../../common/errors/AppError';
 import * as workspaceRepo from './workspace.repository';
-import { WorkspaceRole } from '../../generated/prisma/client';
+import { WorkspaceRole } from '@prisma/client';
 
 export const getWorkspaceById = async (workspaceId: string, userId: string) => {
   const workspace = await workspaceRepo.findWorkspaceById(workspaceId);

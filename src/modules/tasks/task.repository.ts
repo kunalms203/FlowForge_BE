@@ -1,5 +1,5 @@
 import { prisma } from "../../config/prisma";
-import { TaskStatus, TaskPriority } from "../../generated/prisma/client";
+import { TaskStatus, TaskPriority } from "@prisma/client";
 
 export const findTaskById = async (id: string) => {
   return prisma.task.findFirst({

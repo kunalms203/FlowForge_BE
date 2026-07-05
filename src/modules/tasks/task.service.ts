@@ -1,6 +1,6 @@
 import { AppError } from '../../common/errors/AppError';
 import * as taskRepo from './task.repository';
-import { TaskStatus, TaskPriority } from '../../generated/prisma/client';
+import { TaskStatus, TaskPriority } from '@prisma/client';
 
 export const getTaskById = async (taskId: string, userId: string) => {
   const task = await taskRepo.findTaskById(taskId);
