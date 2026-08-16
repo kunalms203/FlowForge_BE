@@ -1,5 +1,5 @@
 import { prisma } from '../../config/prisma';
-import { Project } from '../../generated/prisma/client';
+import { Project } from '@prisma/client';
 
 export const findProjectById = async (id: string) => {
   return prisma.project.findFirst({

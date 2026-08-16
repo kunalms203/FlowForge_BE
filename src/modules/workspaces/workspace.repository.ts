@@ -1,5 +1,5 @@
 import { prisma } from '../../config/prisma';
-import { WorkspaceRole } from '../../generated/prisma/client';
+import { WorkspaceRole } from '@prisma/client';
 
 export const findWorkspaceById = async (id: string) => {
   return prisma.workspace.findUnique({
