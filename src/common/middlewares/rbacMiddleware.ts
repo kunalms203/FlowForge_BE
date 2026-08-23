@@ -2,7 +2,7 @@ import { Response, NextFunction } from 'express';
 import { AuthRequest } from './authMiddleware';
 import { prisma } from '../../config/prisma';
 import { AppError } from '../errors/AppError';
-import { WorkspaceRole } from '@prisma/client';
+import { WorkspaceRole } from '../../../generated';
 
 export const requireWorkspaceRole = (roles: WorkspaceRole[]) => {
   return async (req: AuthRequest, res: Response, next: NextFunction) => {

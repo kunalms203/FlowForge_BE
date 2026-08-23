@@ -1,14 +1,14 @@
 import { AppError } from '../../common/errors/AppError';
 import * as taskRepo from './task.repository';
-import { TaskStatus, TaskPriority } from '@prisma/client';
+import { TaskStatus, TaskPriority, Prisma } from '../../../generated';
 
-export const getTaskById = async (taskId: string, userId: string) => {
+export const getTaskById = async (taskId: string) => {
   const task = await taskRepo.findTaskById(taskId);
   if (!task) throw new AppError('Task not found', 404);
   return task;
 };
 
-export const getBoardTasks = async (boardId: string, userId: string) => {
+export const getBoardTasks = async (boardId: string) => {
   return taskRepo.findTasksByBoard(boardId);
 };
 
@@ -37,19 +37,19 @@ export const createTask = async (
   });
 };
 
-export const updateTask = async (taskId: string, userId: string, data: any) => {
+export const updateTask = async (taskId: string, userId: string, data: Prisma.TaskUpdateInput) => {
   const task = await taskRepo.findTaskById(taskId);
   if (!task) throw new AppError('Task not found', 404);
   return taskRepo.updateTask(taskId, data);
 };
 
-export const deleteTask = async (taskId: string, userId: string) => {
+export const deleteTask = async (taskId: string) => {
   const task = await taskRepo.findTaskById(taskId);
   if (!task) throw new AppError('Task not found', 404);
   return taskRepo.deleteTask(taskId);
 };
 
-export const moveTask = async (taskId: string, newBoardId: string, userId: string) => {
+export const moveTask = async (taskId: string, newBoardId: string) => {
   const task = await taskRepo.findTaskById(taskId);
   if (!task) throw new AppError('Task not found', 404);
   return taskRepo.moveTask(taskId, newBoardId);

@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { verify } from 'jsonwebtoken';
 import { env } from '../../config/env';
 import { AppError } from '../../common/errors/AppError';
@@ -18,7 +18,7 @@ export const register = async (data: {
   }
 
   const passwordHash = await bcrypt.hash(data.password, env.BCRYPT_ROUNDS);
-  
+
   const user = await authRepo.createUser({
     email: data.email,
     passwordHash,
@@ -60,7 +60,12 @@ export const register = async (data: {
   };
 };
 
-export const login = async (email: string, password: string, ipAddress?: string, userAgent?: string) => {
+export const login = async (
+  email: string,
+  password: string,
+  ipAddress?: string,
+  userAgent?: string
+) => {
   const user = await authRepo.findUserByEmail(email);
   if (!user) {
     throw new AppError('Invalid credentials', 401);
@@ -105,7 +110,7 @@ export const refreshAccessToken = async (refreshToken: string) => {
   try {
     const decoded = verify(refreshToken, env.REFRESH_SECRET) as { id: string };
     const refreshTokenHash = crypto.createHash('sha256').update(refreshToken).digest('hex');
-    
+
     const session = await authRepo.findSessionByRefreshToken(refreshTokenHash);
     if (!session || session.expiresAt < new Date()) {
       throw new AppError('Invalid or expired refresh token', 401);
@@ -123,7 +128,7 @@ export const refreshAccessToken = async (refreshToken: string) => {
     });
 
     return { accessToken: newAccessToken };
-  } catch (error) {
+  } catch {
     throw new AppError('Invalid refresh token', 401);
   }
 };

@@ -1,5 +1,5 @@
 import { prisma } from '../../config/prisma';
-import type { User } from '@prisma/client';
+import type { User } from '../../../generated';
 
 export const findUserByEmail = async (email: string): Promise<User | null> => {
   return prisma.user.findUnique({
@@ -19,7 +19,7 @@ export const createUser = async (data: {
 
 export const createWorkspaceForUser = async (userId: string, workspaceName: string) => {
   const slug = workspaceName.toLowerCase().replace(/[^a-z0-9]/g, '-') + '-' + Date.now();
-  
+
   return prisma.$transaction(async (tx) => {
     const workspace = await tx.workspace.create({
       data: {

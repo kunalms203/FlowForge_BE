@@ -1,5 +1,4 @@
 import { prisma } from '../../config/prisma';
-import { Project } from '@prisma/client';
 
 export const findProjectById = async (id: string) => {
   return prisma.project.findFirst({
@@ -22,7 +21,11 @@ export const findProjectsByWorkspace = async (workspaceId: string) => {
   });
 };
 
-export const createProject = async (data: { workspaceId: string; name: string; description?: string }) => {
+export const createProject = async (data: {
+  workspaceId: string;
+  name: string;
+  description?: string;
+}) => {
   return prisma.project.create({ data });
 };
 

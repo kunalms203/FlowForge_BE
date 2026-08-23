@@ -1,5 +1,5 @@
-import { prisma } from "../../config/prisma";
-import { TaskStatus, TaskPriority } from "@prisma/client";
+import { prisma } from '../../config/prisma';
+import { TaskStatus, TaskPriority } from '../../../generated';
 
 export const findTaskById = async (id: string) => {
   return prisma.task.findFirst({
@@ -9,7 +9,7 @@ export const findTaskById = async (id: string) => {
       reporter: { select: { id: true, fullName: true, email: true } },
       comments: {
         include: { user: { select: { id: true, fullName: true } } },
-        orderBy: { createdAt: "asc" },
+        orderBy: { createdAt: 'asc' },
       },
       attachments: true,
       labels: { include: { label: true } },
@@ -20,7 +20,7 @@ export const findTaskById = async (id: string) => {
 export const findTasksByBoard = async (boardId: string) => {
   return prisma.task.findMany({
     where: { boardId, deletedAt: null },
-    orderBy: { createdAt: "asc" },
+    orderBy: { createdAt: 'asc' },
     include: { assignee: { select: { id: true, fullName: true } } },
   });
 };
@@ -51,11 +51,8 @@ export const createTask = async (data: {
 export const updateTask = async (
   id: string,
   data: Partial<
-    Omit<
-      Parameters<typeof createTask>[0],
-      "workspaceId" | "projectId" | "boardId" | "reporterId"
-    >
-  >,
+    Omit<Parameters<typeof createTask>[0], 'workspaceId' | 'projectId' | 'boardId' | 'reporterId'>
+  >
 ) => {
   return prisma.task.update({ where: { id }, data });
 };
@@ -64,10 +61,6 @@ export const deleteTask = async (id: string) => {
   return prisma.task.update({ where: { id }, data: { deletedAt: new Date() } });
 };
 
-export const moveTask = async (
-  id: string,
-  newBoardId: string,
-  newPosition?: number,
-) => {
+export const moveTask = async (id: string, newBoardId: string) => {
   return prisma.task.update({ where: { id }, data: { boardId: newBoardId } });
 };

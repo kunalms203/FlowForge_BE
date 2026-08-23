@@ -1,5 +1,5 @@
 import { prisma } from '../../config/prisma';
-import { WorkspaceRole } from '@prisma/client';
+import { WorkspaceRole } from '../../../generated';
 
 export const findWorkspaceById = async (id: string) => {
   return prisma.workspace.findUnique({
@@ -53,7 +53,11 @@ export const addMember = async (workspaceId: string, userId: string, role: Works
   });
 };
 
-export const updateMemberRole = async (workspaceId: string, userId: string, role: WorkspaceRole) => {
+export const updateMemberRole = async (
+  workspaceId: string,
+  userId: string,
+  role: WorkspaceRole
+) => {
   return prisma.workspaceMember.update({
     where: { workspaceId_userId: { workspaceId, userId } },
     data: { role },
