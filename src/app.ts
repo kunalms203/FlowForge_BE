@@ -8,6 +8,17 @@ import { env } from './config/env';
 import { errorHandler } from './common/middlewares/errorHandler';
 import routes from './routes';
 
+declare global {
+  interface BigInt {
+    toJSON(): number | string;
+  }
+}
+
+BigInt.prototype.toJSON = function () {
+  const int = Number(this);
+  return Number.isSafeInteger(int) ? int : this.toString();
+};
+
 const app: Application = express();
 
 app.use(helmet());
