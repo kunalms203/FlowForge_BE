@@ -1,5 +1,5 @@
 import { prisma } from '../../config/prisma';
-import { TaskStatus, TaskPriority } from '../../../generated';
+import { TaskStatus, TaskPriority, Prisma } from '../../../generated';
 
 export const findTaskById = async (id: string) => {
   return prisma.task.findFirst({
@@ -50,9 +50,14 @@ export const createTask = async (data: {
 
 export const updateTask = async (
   id: string,
-  data: Partial<
-    Omit<Parameters<typeof createTask>[0], 'workspaceId' | 'projectId' | 'boardId' | 'reporterId'>
-  >
+  data:
+    | Partial<
+        Omit<
+          Parameters<typeof createTask>[0],
+          'workspaceId' | 'projectId' | 'boardId' | 'reporterId'
+        >
+      >
+    | Prisma.TaskUpdateInput
 ) => {
   return prisma.task.update({ where: { id }, data });
 };

@@ -2,7 +2,7 @@ import winston from 'winston';
 import { env } from './env';
 
 export const logger = winston.createLogger({
-  level: env.NODE_ENV === 'production' ? 'info' : 'debug',
+  level: env.NODE_ENV === 'production' || env.NODE_ENV === 'docker' ? 'info' : 'debug',
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.errors({ stack: true }),
@@ -15,11 +15,10 @@ export const logger = winston.createLogger({
   ],
 });
 
-if (env.NODE_ENV !== 'production') {
-  logger.add(new winston.transports.Console({
-    format: winston.format.combine(
-      winston.format.colorize(),
-      winston.format.simple()
-    ),
-  }));
+if (env.NODE_ENV !== 'production' && env.NODE_ENV !== 'docker') {
+  logger.add(
+    new winston.transports.Console({
+      format: winston.format.combine(winston.format.colorize(), winston.format.simple()),
+    })
+  );
 }

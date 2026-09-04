@@ -9,7 +9,7 @@ export const getWorkspaces = asyncHandler(async (req: AuthRequest, res: Response
 });
 
 export const getWorkspace = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const workspace = await workspaceService.getWorkspaceById(req.params.workspaceId, req.user!.id);
+  const workspace = await workspaceService.getWorkspaceById(req.params.workspaceId);
   res.json({ success: true, data: workspace });
 });
 
@@ -20,11 +20,15 @@ export const createWorkspace = asyncHandler(async (req: AuthRequest, res: Respon
 });
 
 export const updateWorkspace = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const workspace = await workspaceService.updateWorkspace(req.params.workspaceId, req.user!.id, req.body);
+  const workspace = await workspaceService.updateWorkspace(
+    req.params.workspaceId,
+    req.user!.id,
+    req.body
+  );
   res.json({ success: true, message: 'Workspace updated', data: workspace });
 });
 
 export const deleteWorkspace = asyncHandler(async (req: AuthRequest, res: Response) => {
-  await workspaceService.deleteWorkspace(req.params.workspaceId, req.user!.id);
+  await workspaceService.deleteWorkspace(req.params.workspaceId);
   res.json({ success: true, message: 'Workspace deleted' });
 });
