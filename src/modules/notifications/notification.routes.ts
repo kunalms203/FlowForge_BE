@@ -1,6 +1,11 @@
 import { Router } from 'express';
 import { authenticate } from '../../common/middlewares/authMiddleware';
-import { getNotifications, markAsRead, markAllAsRead, deleteNotification } from './notification.controller';
+import {
+  getNotifications,
+  markAsRead,
+  markAllAsRead,
+  deleteNotification,
+} from './notification.controller';
 
 const router = Router();
 router.use(authenticate);

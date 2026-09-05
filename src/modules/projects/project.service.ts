@@ -1,27 +1,35 @@
 import { AppError } from '../../common/errors/AppError';
 import * as projectRepo from './project.repository';
 
-export const getProjectById = async (projectId: string, userId: string) => {
+export const getProjectById = async (projectId: string) => {
   const project = await projectRepo.findProjectById(projectId);
   if (!project) throw new AppError('Project not found', 404);
   return project;
 };
 
-export const getWorkspaceProjects = async (workspaceId: string, userId: string) => {
+export const getWorkspaceProjects = async (workspaceId: string) => {
   return projectRepo.findProjectsByWorkspace(workspaceId);
 };
 
-export const createProject = async (workspaceId: string, userId: string, data: { name: string; description?: string }) => {
+export const createProject = async (
+  workspaceId: string,
+  userId: string,
+  data: { name: string; description?: string }
+) => {
   return projectRepo.createProject({ workspaceId, ...data });
 };
 
-export const updateProject = async (projectId: string, userId: string, data: { name?: string; description?: string }) => {
+export const updateProject = async (
+  projectId: string,
+  userId: string,
+  data: { name?: string; description?: string }
+) => {
   const project = await projectRepo.findProjectById(projectId);
   if (!project) throw new AppError('Project not found', 404);
   return projectRepo.updateProject(projectId, data);
 };
 
-export const deleteProject = async (projectId: string, userId: string) => {
+export const deleteProject = async (projectId: string) => {
   const project = await projectRepo.findProjectById(projectId);
   if (!project) throw new AppError('Project not found', 404);
   return projectRepo.deleteProject(projectId);

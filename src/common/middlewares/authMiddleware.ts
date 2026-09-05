@@ -1,8 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
-import { verify } from 'jsonwebtoken';
 import { env } from '../../config/env';
 import { AppError } from '../errors/AppError';
 import { prisma } from '../../config/prisma';
+import { verify, JwtPayload } from 'jsonwebtoken';
+
+interface AuthTokenPayload extends JwtPayload {
+  userId: string;
+}
 
 export interface AuthRequest extends Request {
   user?: {
@@ -12,11 +16,7 @@ export interface AuthRequest extends Request {
   };
 }
 
-export const authenticate = async (
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction
-) => {
+export const authenticate = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -24,7 +24,7 @@ export const authenticate = async (
     }
 
     const token = authHeader.split(' ')[1];
-    const decoded = verify(token, env.JWT_SECRET) as any;
+    const decoded = verify(token, env.JWT_SECRET) as AuthTokenPayload;
 
     const user = await prisma.user.findUnique({
       where: { id: decoded.id },
@@ -37,7 +37,7 @@ export const authenticate = async (
 
     req.user = user;
     next();
-  } catch (error) {
+  } catch {
     next(new AppError('Invalid or expired token', 401));
   }
 };

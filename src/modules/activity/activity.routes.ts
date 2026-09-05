@@ -1,7 +1,11 @@
 import { Router } from 'express';
 import { authenticate } from '../../common/middlewares/authMiddleware';
 import { ensureWorkspaceAccess } from '../../common/middlewares/tenantMiddleware';
-import { getWorkspaceActivities, getProjectActivities, getTaskActivities } from './activity.controller';
+import {
+  getWorkspaceActivities,
+  getProjectActivities,
+  getTaskActivities,
+} from './activity.controller';
 
 const router = Router();
 

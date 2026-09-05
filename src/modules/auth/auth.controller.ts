@@ -16,7 +16,7 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body;
   const ipAddress = req.ip;
   const userAgent = req.headers['user-agent'];
-  
+
   const result = await authService.login(email, password, ipAddress, userAgent);
   res.status(200).json({
     success: true,
@@ -30,7 +30,7 @@ export const refresh = asyncHandler(async (req: Request, res: Response) => {
   if (!refreshToken) {
     throw new AppError('Refresh token required', 400);
   }
-  
+
   const result = await authService.refreshAccessToken(refreshToken);
   res.status(200).json({
     success: true,

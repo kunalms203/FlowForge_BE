@@ -10,7 +10,7 @@ export const uploadAttachment = async (
   file: Express.Multer.File
 ) => {
   if (!file) throw new AppError('No file uploaded', 400);
-  
+
   const fileUrl = `/uploads/${file.filename}`;
   const attachment = await attachmentRepo.createAttachment({
     taskId,
@@ -26,11 +26,12 @@ export const uploadAttachment = async (
 export const deleteAttachment = async (attachmentId: string, userId: string) => {
   const attachment = await attachmentRepo.findAttachmentById(attachmentId);
   if (!attachment) throw new AppError('Attachment not found', 404);
-  if (attachment.userId !== userId) throw new AppError('Unauthorized to delete this attachment', 403);
-  
+  if (attachment.userId !== userId)
+    throw new AppError('Unauthorized to delete this attachment', 403);
+
   // Delete file from disk
   const filePath = path.join(env.UPLOAD_DIR, path.basename(attachment.fileUrl));
   await fs.unlink(filePath).catch(() => {});
-  
+
   return attachmentRepo.deleteAttachment(attachmentId);
 };
